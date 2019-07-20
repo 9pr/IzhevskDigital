@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактор многоугольника</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--
+        Укажите свой API-ключ. Тестовый ключ НЕ БУДЕТ работать на других сайтах.
+        Получить ключ можно в Кабинете разработчика: https://developer.tech.yandex.ru/keys/
+    -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=<ваш API-ключ>" type="text/javascript"></script>
+    <script>
+    
+    ymaps.ready(init);
+
+function init() {
+    var myMap = new ymaps.Map("map", {
+            center: [55.73, 37.75],
+            zoom: 10
+        }, {
+            searchControlProvider: 'yandex#search'
+        });
+
+    // Создаем многоугольник без вершин.
+    var myPolygon = new ymaps.Polygon([], {
+            hintContent: "Редактировать"
+        }, {
+            // Курсор в режиме добавления новых вершин.
+            editorDrawingCursor: "crosshair",
+            // Максимально допустимое количество вершин.
+            editorMaxPoints: 5,
+            // Цвет заливки.
+            fillColor: '#00FF00',
+            // Прозрачность заливки
+            fillOpacity: 0.5,
+            // Цвет обводки.
+            strokeColor: '#0000FF',
+            // Ширина обводки.
+            strokeWidth: 2
+    });
+    
+    //Добавляем кнопку на карту
+    myMap.controls.add(buttonPolygon, {
+        float: 'left',
+        floatIndex: 100
+    });
+    
+    //Нажатие кнопки отрисовки полигона
+    buttonPolygon.events.add ('click', function (e) {
+        alert('Кнопка нажата '+buttonPolygon.data.get('image'))
+        //убрать подсветку кнопки установки точки
+        buttonPoint.deselect();
+        
+        // Добавляем многоугольник на карту.
+        myMap.geoObjects.add(myPolygon);
+    
+        // В режиме добавления новых вершин меняем цвет обводки многоугольника.
+        var stateMonitor = new ymaps.Monitor(myPolygon.editor.state);
+        stateMonitor.add("drawing", function (newValue) {
+            myPolygon.options.set("strokeColor", newValue ? '#FF0000' : '#0000FF');
+        });
+        
+        if ( buttonPolygon.isSelected()) {
+            //прекращаем редактирование полигона
+            myPolygon.editor.stopEditing();
+        }
+        else {
+            // Включаем режим редактирования с возможностью добавления новых вершин.
+            myPolygon.editor.startDrawing();
+        }
+    })
+    
+    //Кнопка для постановки меток
+    var buttonPoint = new ymaps.control.Button({
+    data: {
+        // Зададим иконку для кнопки.
+        image: 'https://img.icons8.com/nolan/2x/enter-2.png',
+        // Текст на кнопке.
+        content: 'Точка вьезда или просто точка',
+        // Текст всплывающей подсказки.
+        title: 'Кликните на карту при активной кнопки, поставьте метку'
+    },
+    options: {
+        // Зададим опции кнопки.
+        selectOnClick: true,
+        // У кнопки будет три состояния: иконка, текст и текст + иконка.
+        // Зададим три значения ширины кнопки для всех состояний.
+        maxWidth: [30, 100, 150]
+        }
+    });
+    //Добавляем кнопку на карту
+    myMap.controls.add(buttonPoint, {
+        float: 'left',
+        floatIndex: 90
+    });
+
+    //Когда нажимаем кнопку постановки метки, запрещаем редактирование
+    //полигона и деактивируем отвечающую за нее кнопку
+    buttonPoint.events.add ('click', function (e) {
+        //убрать подсветку кнопки полигона
+        buttonPolygon.deselect();
+        //прекращаем редактирование полигона
+        myPolygon.editor.stopEditing();
+        
+        //если активна кнопка постановки точки, ставим метку
+        alert (!buttonPoint.isSelected());
+        geoPoint (myMap, !buttonPoint.isSelected());
+    });
+}
+
+function geoPoint (myMap, drawPoint=true) {
+
+if ( drawPoint === true ) {
+    // Создаем геообъект с типом геометрии "Точка".
+    myPointGeoObject = new ymaps.GeoObject({
+        // Описание геометрии.
+        geometry: {
+            type: "Point",
+            //coordinates: coords
+        },
+        // Свойства.
+        properties: {
+            // Контент метки.
+            iconContent: 'Метка',
+            hintContent: 'Можно перетаскивать'
+        }
+    }, {
+        // Опции.
+        // Иконка метки будет растягиваться под размер ее содержимого.
+        //preset: 'islands#blackStretchyIcon',
+        // Метку можно перемещать.
+        draggable: true,
+        
+        // Задаем стиль метки (метка в виде круга).
+        preset: "islands#circleDotIcon",
+        // Задаем цвет метки (в формате RGB).
+        iconColor: '#0000ff',
+        editorDrawingCursor: "crosshair"
+    });
+    myMap.geoObjects.add(myPointGeoObject);
+    
+    // Включаем режим редактирования с возможностью добавления новых вершин.
+    myPointGeoObject.editor.startDrawing();
+}
+else {
+    //прекращаем отрисовывание точки
+    myPointGeoObject.editor.stopEditing();
+}
+
+/*
+if (coords !== false) {
+    myPointGeoObject.geometry.setCoordinates(coords);
+    myPointGeoObject.editor.stopEditing();
+}
+*/
+    
+    myPointGeoObject.events.add('click', function (e) {
+        alert ("Координаты точки "+myPointGeoObject.geometry.getCoordinates());
+        //удаляет метку, переделать под запрос, на перетаскивание не влияет!!!
+        myMap.geoObjects.remove(myPointGeoObject);
+    });
+}
+
+    
+    </script>
+	<style>
+        html, body {
+            width: 100%; height: 95%; padding: 0; margin: 0;
+            font-family: Arial;
+        }
+
+        #map {
+            width: 100%;
+            height: 90%;
+        }
+
+        .header {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<p class='header'>Кликните на карту, чтобы начать создание многоугольника</p>
+<div id="map"></div>
+</body>
+</html>

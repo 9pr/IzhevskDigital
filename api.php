@@ -10,6 +10,10 @@ if (isset($_GET['querytype'])) {
         $result = $api->getParking();
         break;
 
+        case 'setParking':
+        $result = $api->setParking();
+        break;
+
         default:
         $result = [
             'error' => 'Неверный запрос'
