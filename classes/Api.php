@@ -12,10 +12,12 @@ class Api {
     public function getParking() {
         $sth = $this->db->prepare("SELECT * FROM parking");
         $sth->execute();
-        return $sth->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-        return ['ok' => 'ok'];
+        while ($current = $sth->fetch(PDO::FETCH_ASSOC)) {
+            $result[$current['idParking']] = [
+                'all' => $current,
+            ];
+        }
+        return $result;
     }
 }
