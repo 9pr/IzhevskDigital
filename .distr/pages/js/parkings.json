@@ -1,0 +1,28 @@
+[{
+	"type": "Feature",
+	"properties": {
+		"balloonContent":"\u0411\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u0430\u044f \u043f\u0430\u0440\u043a\u043e\u0432\u043a\u0430 \u043d\u0430 \u043a\u043e\u0442\u043e\u0440\u043e\u0439 \u0435\u0441\u0442\u044c \u043c\u0435\u0441\u0442\u0430 \u21161"
+	},
+	"geometry": {
+		"type": "Point",
+		"coordinates": [56.849906, 53.223533]
+	}
+}, {
+	"type": "Feature",
+	"properties": {
+		"balloonContent": "\u0411\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u0430\u044f \u043f\u0430\u0440\u043a\u043e\u0432\u043a\u0430 \u043d\u0430 \u043a\u043e\u0442\u043e\u0440\u043e\u0439 \u043d\u0435\u0442 \u043c\u0435\u0441\u0442 \u21162"
+	},
+	"geometry": {
+		"type": "Point",
+		"coordinates": [56.849309, 53.222357]
+	}
+}, {
+	"type": "Feature",
+	"properties": {
+		"balloonContent": "\u0411\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u0430\u044f \u043f\u0430\u0440\u043a\u043e\u0432\u043a\u0430 \u043d\u0430 \u043a\u043e\u0442\u043e\u0440\u043e\u0439 \u0435\u0441\u0442\u044c \u043c\u0435\u0441\u0442\u0430 \u21163"
+	},
+	"geometry": {
+		"type": "Point",
+		"coordinates": [56.848884, 53.223101]
+	}
+}]
