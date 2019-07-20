@@ -16,6 +16,16 @@
         .then(reg => console.log('Registration success. Scope is ', reg.scope))
         .catch(err => console.log('Registration failed. ', err));
       }
+
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(  position => {
+          console.log(position);
+        });
+      }
+
+
+
+
     </script>
   </body>
 </html>
