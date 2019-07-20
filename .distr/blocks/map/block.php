@@ -1,3 +1,1 @@
-<div id="map" class="map">
-	<i class="icon-location"></i>
-</div>
+<div id="map" class="map"></div>
