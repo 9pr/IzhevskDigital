@@ -1,2 +1,2 @@
-#RewriteCond %{HTTPS} =off 
-#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [QSA,L]
+RewriteCond %{HTTPS} =off 
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [QSA,L]
