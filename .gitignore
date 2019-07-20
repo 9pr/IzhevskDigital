@@ -1,0 +1,5 @@
+public/
+node_modules
+manifest/
+package-lock.json
+gulpconfig.json
