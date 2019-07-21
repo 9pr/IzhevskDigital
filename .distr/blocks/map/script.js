@@ -1,62 +1,92 @@
-ymaps.ready(initMap);
+ymaps.ready(init);
 
-function initMap() {
-	var myMap = new ymaps.Map("map", {
-		center: [55.73, 37.75],
-		zoom: 15,
-		controls: ['routeButtonControl']
-	}, {
-		searchControlProvider: 'yandex#search'
-	}),
-	parkings, endPoint;
+function init() {
+    var geolocation = ymaps.geolocation,
+        myMap = new ymaps.Map('map__widget', {
+        center: [56.852593, 53.204843], // Ижевск
+        zoom: 18,
+        controls: []
+    }, {
+            searchControlProvider: 'yandex#search'
+        });
 
-
-
-	/* Строим маршрут */
-	var control = myMap.controls.get('routeButtonControl');
-
-	// Указываем тип маршрута Автомобильный
-	control.routePanel.state.set({
-		type: 'auto'
-	});
-	control.routePanel.options.set({
-		types: { auto: true }
-	});
-
-	// Зададим координаты пункта отправления с помощью геолокации.
-	control.routePanel.geolocate('from');
-
-	// Откроем панель для построения маршрутов.
-  control.state.set('expanded', true);
+    // Добавляю блок поиска на сайт
+    var mySearchControl = new ymaps.control.SearchControl({
+        options: {
+            noPlacemark: true
+        }
+    });
+    myMap.controls.add(mySearchControl);
 
 
+    // Запрашиваю парковки
+    jQuery.getJSON('js/parkings.json', function (json) {
+        var parkings,
+            parking;
+
+        // Вывожу парковки на карте
+        parkings = ymaps.geoQuery({
+            type: 'FeatureCollection',
+            features: json
+        }).addToMap(myMap);
+
+        // Получаю координаты поиска
+        mySearchControl.events.add('resultselect', function (e) {
+            var index = e.get('index');
+            mySearchControl.getResult(index).then(function (res) {
+                var routetEnd = res.geometry.getCoordinates();
+
+                // С помощью обратного геокодирования найдем ближайшую парковку
+                parking = ymaps.geoQuery(ymaps.geocode(routetEnd, {kind: 'street'}))
+                // Нужно дождаться ответа от сервера и только потом обрабатывать полученные результаты.
+                .then( parkings.getClosestTo(routetEnd).balloon.open() );
+
+                console.log(parking.geometry.getCoordinates())
 
 
-	function findClosestObjects () {
-		// Найдем в выборке кафе, ближайшее к найденной станции метро,
-		// и откроем его балун.
-		//parkings.getClosestTo(endPoint.get(0)).balloon.open();
-
-		// Будем открывать балун кафе, который ближе всего к месту клика
-		myMap.events.add('click', function (event) {
-			parkings.getClosestTo(event.get('coords')).balloon.open();
-		});
-	}
-
-	// Описания кафе можно хранить в формате JSON, а потом генерировать
-	// из описания геообъекты с помощью ymaps.geoQuery.
-	jQuery.getJSON('js/parkings.json', function (json) {
-    parkings = ymaps.geoQuery({
-    	type: 'FeatureCollection',
-    	features: json
-    }).addToMap(myMap);;
-  });
+                // Геолокация
+                geolocation.get({
+                    provider: 'yandex',
+                    mapStateAutoApply: true
+                }).then(function (result) {
+                    var userPosition = result.geoObjects.position;
+                    console.log(userPosition, parking, routetEnd);
 
 
-	// С помощью обратного геокодирования найдем метро "Кропоткинская".
-	endPoint = ymaps.geoQuery(ymaps.geocode([55.744828, 37.603423], {kind: 'endPoint'}))
-	// Нужно дождаться ответа от сервера и только потом обрабатывать полученные результаты.
-	.then(findClosestObjects);
+                    // Строю маршрут
+                    var multiRoute = new ymaps.multiRouter.MultiRoute({
+                        referencePoints: [
+                            userPosition,
+                            parking,
+                            routetEnd
+                        ],
+                        params: {
+                            routingMode: 'masstransit'
+                        }
+                    });
+
+                    ymaps.modules.require([
+                        'MultiRouteColorizer'
+                    ], function (MultiRouteColorizer) {
+                        // Создаем объект, раскрашивающий линии сегментов маршрута.
+                        new MultiRouteColorizer(multiRoute);
+                    });
 
 
+                    // Добавляем мультимаршрут на карту.
+                    myMap.geoObjects.add(multiRoute);
+
+                });
+
+
+
+
+
+            });
+
+
+        });
+
+
+    });
 }
