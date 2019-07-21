@@ -14,8 +14,19 @@ class Api {
         $sth->execute();
 
         while ($current = $sth->fetch(PDO::FETCH_ASSOC)) {
-            $result[$current['idParking']] = [
-                'all' => $current,
+            $result[] = [
+                'type' => 'Feature',
+                'id' => (int)$current['idParking'],
+                'properties' => [
+                    'balloonContent' => $current['descriptionParking'],
+                ],
+                'options' => [
+                    'preset' => $current['freePlaceParking'] == 1 ? 'islands#greenIcon' : 'islands#redIcon',
+                ], 
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => array_map('floatval', explode(', ',$current['coordinatesParking'])),
+                ],
             ];
         }
         return $result;
