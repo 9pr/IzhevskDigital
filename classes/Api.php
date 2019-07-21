@@ -51,14 +51,17 @@ class Api {
             */
             if ($row["wasFree"]/$row["records"] < 0.3) {
                 $loadType = "islands#greenIcon";
+                $loadHintText = "Загрузка: низкая";
             }
             elseif ($row["wasFree"]/$row["records"] > 0.7) {
                 $loadType = "islands#redIcon";
+                $loadHintText = "Загрузка: высокая";
             }
             else {
                 $loadType = "islands#yellowIcon";
+                $loadHintText = "Загрузка: средняя";
             }
-            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "<a href=\"/api.php?querytype=statisticsOccupationDetailed&idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}}';
+            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Статистика парковки", "balloonContentBody": "<a href=\"statisticsOccupationDetailed.php?idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Краткая информация", "clusterCaption": "Парковка", "hintContent": "'.$loadHintText.'"}}';
         }
         header('Content-Type: application/json');
         echo '{"type": "FeatureCollection","features": ['.join (', ', $parking).']}';
