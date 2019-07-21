@@ -43,6 +43,7 @@
 	<div class="page-wrapper">
 		{% include 'map/block.php' %}
 		{% include 'user-panel/block.php' %}
+    {% include 'alert/block.php' %}
 	</div>
 
 	{% endblock %}
