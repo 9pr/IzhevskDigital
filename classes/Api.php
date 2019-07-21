@@ -111,14 +111,12 @@ class Api {
     }
 
     public function setParkingType() {
-        $stmt = $this->db->prepare("UPDATE parking SET freePlaceParking = :freePlaceParking WHERE idParking = :idParking");
+        $stmt = $this->db->prepare("UPDATE parking SET freePlaceParking = :freePlaceParking WHERE coordinatesParking = :coordinatesParking");
         $stmt->bindParam(':freePlaceParking', $freePlaceParking, PDO::PARAM_STR);
-        $stmt->bindParam(':idParking', $idParking, PDO::PARAM_STR);
+        $stmt->bindParam(':coordinatesParking', $coordinatesParking, PDO::PARAM_STR);
         
         $freePlaceParking = $_GET['freePlaceParking'];
-        $idParking = $_GET['idParking'];
-
-        $stmt->execute();
+        $coordinatesParking = $_GET['coordinatesParking'];
         return [
             'success' => 'Обновлено успешно',
         ]; 
