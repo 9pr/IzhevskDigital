@@ -11,7 +11,7 @@ function test(){
                 bounds,
                 [mapContainer.width(), mapContainer.height()]
             );
-            console.log(bounds);
+            //console.log(bounds);
         createMap(mapState);
     }, function (e) {
         // Если местоположение невозможно получить, то просто создаем карту.
@@ -64,17 +64,6 @@ function init() {
         var parkings,
             parking;
 
-        // parkings = new ymaps.ObjectManager({
-        //     // Чтобы метки начали кластеризоваться, выставляем опцию.
-        //     clusterize: true,
-        //     // ObjectManager принимает те же опции, что и кластеризатор.
-        //     gridSize: 32,
-        //     clusterDisableClickZoom: false
-        // });
-        // parkings.add(json);
-        // myMap.geoObjects.add(parkings);
-
-
         // Вывожу парковки на карте
         parkings = ymaps.geoQuery({
             type: 'FeatureCollection',
@@ -93,7 +82,7 @@ function init() {
                 .then( function(){
 
                     parkings.getClosestTo(routetEnd).balloon.open();
-                    console.log(parkings.getClosestTo(routetEnd));
+                    //console.log(parkings.getClosestTo(routetEnd));
 
                     var parkingPoint = parkings.getClosestTo(routetEnd).geometry.getCoordinates();
 
@@ -107,6 +96,9 @@ function init() {
                         params: {
                             routingMode: 'auto'
                         }
+                    }, {
+                        // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+                        boundsAutoApply: true
                     });
 
                     // Добавляем мультимаршрут на карту.
@@ -133,7 +125,7 @@ function init() {
 
                     var parkingPoint = parkings.getClosestTo(newUserPosition).geometry.getCoordinates();
                     var coordinates = parkingPoint.join(", ");
-                    console.log(coordinates);
+                    //console.log(coordinates);
 
 
                     // В зависимости от занятости парковки меняю ее цвет

@@ -6,7 +6,7 @@
 
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
   <link rel="apple-touch-icon" sizes="180x180" href="img/blocks/favicon/apple-touch-icon.png">
