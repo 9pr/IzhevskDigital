@@ -17,11 +17,11 @@
         .catch(err => console.log('Registration failed. ', err));
       }
 
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(  position => {
-          console.log(position);
-        });
-      }
+      // if ('geolocation' in navigator) {
+      //   navigator.geolocation.getCurrentPosition(  position => {
+      //     console.log(position);
+      //   });
+      // }
 
 
 
