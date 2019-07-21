@@ -14,6 +14,10 @@ if (isset($_GET['querytype'])) {
         $result = $api->setParking();
         break;
 
+        case 'getStatisticsOccupation':
+        $result = $api->getStatisticsOccupation();
+        break;
+
         default:
         $result = [
             'error' => 'Неверный запрос'

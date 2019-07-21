@@ -3,3 +3,6 @@ node_modules
 manifest/
 package-lock.json
 gulpconfig.json
+node_modules
+public
+local
