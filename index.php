@@ -1,3 +1,9 @@
+<script>
+  window.location.replace('https://nlevel.yodata.ru/public'); 
+</script>
+
+
+<!-- 
 <!DOCTYPE html>
 <html>
   <head>
@@ -28,4 +34,4 @@
 
     </script>
   </body>
-</html>
+</html> -->
