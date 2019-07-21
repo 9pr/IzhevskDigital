@@ -64,6 +64,17 @@ function init() {
         var parkings,
             parking;
 
+        // parkings = new ymaps.ObjectManager({
+        //     // Чтобы метки начали кластеризоваться, выставляем опцию.
+        //     clusterize: true,
+        //     // ObjectManager принимает те же опции, что и кластеризатор.
+        //     gridSize: 32,
+        //     clusterDisableClickZoom: false
+        // });
+        // parkings.add(json);
+        // myMap.geoObjects.add(parkings);
+
+
         // Вывожу парковки на карте
         parkings = ymaps.geoQuery({
             type: 'FeatureCollection',
@@ -82,11 +93,11 @@ function init() {
                 .then( function(){
 
                     parkings.getClosestTo(routetEnd).balloon.open();
+                    console.log(parkings.getClosestTo(routetEnd));
 
                     var parkingPoint = parkings.getClosestTo(routetEnd).geometry.getCoordinates();
 
                     // Строю маршрут
-                    console.log(userPosition);
                     var multiRoute = new ymaps.multiRouter.MultiRoute({
                         referencePoints: [
                             userPosition,
@@ -98,30 +109,50 @@ function init() {
                         }
                     });
 
-                    ymaps.modules.require([
-                        'MultiRouteColorizer'
-                    ], function (MultiRouteColorizer) {
-                        // Создаем объект, раскрашивающий линии сегментов маршрута.
-                        new MultiRouteColorizer(multiRoute);
-                    });
-
-
                     // Добавляем мультимаршрут на карту.
                     myMap.geoObjects.add(multiRoute);
 
-
-
-
-                } );
-
-
-
+                });
 
             });
-
-
         });
 
+
+        // Клик по кнопкам
+        $('.user-panel__btn').on('click', function(){
+            var newUserPosition,
+                parkingStatus = $(this).data('point-status'),
+                parkingStatusInt;
+            // По клику на кнопки определяю новое местоположение пользователя
+            ymaps.geolocation.get().then(function (result) {
+                var mapContainer = $('#map__widget');
+                newUserPosition = result.geoObjects.position;
+
+                // Ищу ближайшую парковку
+                nearParking = ymaps.geoQuery(ymaps.geocode(newUserPosition, {kind: 'street'})).then( function(){
+
+                    var parkingPoint = parkings.getClosestTo(newUserPosition).geometry.getCoordinates();
+
+
+                    // В зависимости от занятости парковки меняю ее цвет
+                    if(parkingStatus == 'on') {
+                        parkings.getClosestTo(newUserPosition).options.set('preset', 'islands#yellowIcon');
+                        parkingStatusInt = 1;
+                    }
+                    if(parkingStatus == 'off') {
+                        parkings.getClosestTo(newUserPosition).options.set('preset', 'islands#redIcon');
+                        parkingStatusInt = 1;
+                    }
+
+                    $.ajax({
+                      url: "https://nlevel.yodata.ru/api.php?querytype=setParkingType&freePlaceParking="+parkingStatusInt+"&coordinatesParking="+parkingPoint
+                    }).done(function( data ) {
+                      alert(data);
+                  });
+                });
+            });
+
+        });
 
     });
 }
