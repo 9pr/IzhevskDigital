@@ -14,9 +14,9 @@
 	<meta name="msapplication-TileColor" content="#da532c">
 
 	<link rel="stylesheet" href="css/style.css">
-    <meta name="theme-color" content="#e7e7e7"/>
-    <link rel="shortcut icon" type="image/png" href="/assets/icons/icon-72x72.png">
-    <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#e7e7e7"/>
+  <link rel="shortcut icon" type="image/png" href="/assets/icons/icon-72x72.png">
+  <link rel="manifest" href="/manifest.json">
 
 
 	<!--[if IE]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script><![endif]-->

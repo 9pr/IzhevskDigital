@@ -1,14 +1,54 @@
 ymaps.ready(init);
 
+
+function test(){
+    var map;
+    ymaps.geolocation.get().then(function (res) {
+        var mapContainer = $('#map__widget'),
+            bounds = res.geoObjects.get(0).properties.get('boundedBy'),
+            // Рассчитываем видимую область для текущей положения пользователя.
+            mapState = ymaps.util.bounds.getCenterAndZoom(
+                bounds,
+                [mapContainer.width(), mapContainer.height()]
+            );
+            console.log(bounds);
+        createMap(mapState);
+    }, function (e) {
+        // Если местоположение невозможно получить, то просто создаем карту.
+        createMap({
+            center: [55.751574, 37.573856],
+            zoom: 18
+        });
+    });
+
+    function createMap (state) {
+        map = new ymaps.Map('map__widget', state);
+    }
+}
+
+
 function init() {
-    var geolocation = ymaps.geolocation,
+    var userPosition,
         myMap = new ymaps.Map('map__widget', {
         center: [56.852593, 53.204843], // Ижевск
         zoom: 18,
-        controls: ['zoomControl', 'geolocationControl']
+        controls: ['zoomControl']
     }, {
             searchControlProvider: 'yandex#search'
         });
+
+
+    // Геолокация и позиционирование карты
+    ymaps.geolocation.get().then(function (result) {
+        var mapContainer = $('#map__widget'),
+            bounds = result.geoObjects.get(0).properties.get('boundedBy');
+        userPosition = result.geoObjects.position;
+        myMap.setCenter(userPosition);
+        result.geoObjects.options.set({
+            preset: 'islands#redCircleIcon'
+        });
+        myMap.geoObjects.add(result.geoObjects);
+    });
 
     // Добавляю блок поиска на сайт
     var mySearchControl = new ymaps.control.SearchControl({
@@ -43,11 +83,10 @@ function init() {
 
                     parkings.getClosestTo(routetEnd).balloon.open();
 
-                    var parkingPoint = parkings.getClosestTo(routetEnd).geometry.getCoordinates()
+                    var parkingPoint = parkings.getClosestTo(routetEnd).geometry.getCoordinates();
 
-                    //console.log(parkingPoint);
                     // Строю маршрут
-                    var userPosition = [56.852593, 53.204843]; // TODO починить геолокацию
+                    console.log(userPosition);
                     var multiRoute = new ymaps.multiRouter.MultiRoute({
                         referencePoints: [
                             userPosition,
@@ -71,19 +110,7 @@ function init() {
                     myMap.geoObjects.add(multiRoute);
 
 
-                    // Геолокация
-                    geolocation.get({
-                        provider: 'browser',
-                        mapStateAutoApply: true
-                    }).then(function (result) {
-                        console.log(result);
-                        var userPosition = result.geoObjects.position;
-                        //console.log(userPosition, parking, routetEnd);
 
-
-                        // Сюда вставляем маршрут - строки 48-68
-
-                    });
 
                 } );
 
