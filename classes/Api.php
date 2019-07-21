@@ -14,8 +14,19 @@ class Api {
         $sth->execute();
 
         while ($current = $sth->fetch(PDO::FETCH_ASSOC)) {
-            $result[$current['idParking']] = [
-                'all' => $current,
+            $result[] = [
+                'type' => 'Feature',
+                'id' => (int)$current['idParking'],
+                'properties' => [
+                    'balloonContent' => $current['descriptionParking'],
+                ],
+                'options' => [
+                    'preset' => $current['freePlaceParking'] == 1 ? 'islands#greenIcon' : 'islands#redIcon',
+                ], 
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => array_map('floatval', explode(', ',$current['coordinatesParking'])),
+                ],
             ];
         }
         return $result;
@@ -40,14 +51,17 @@ class Api {
             */
             if ($row["wasFree"]/$row["records"] < 0.3) {
                 $loadType = "islands#greenIcon";
+                $loadHintText = "Загрузка: низкая";
             }
             elseif ($row["wasFree"]/$row["records"] > 0.7) {
                 $loadType = "islands#redIcon";
+                $loadHintText = "Загрузка: высокая";
             }
             else {
                 $loadType = "islands#yellowIcon";
+                $loadHintText = "Загрузка: средняя";
             }
-            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "<a href=\"/api.php?querytype=statisticsOccupationDetailed&idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}}';
+            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Статистика парковки", "balloonContentBody": "<a href=\"/api.php?querytype=statisticsOccupationDetailed&idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Краткая информация", "clusterCaption": "Парковка", "hintContent": "'.$loadHintText.'"}}';
         }
         header('Content-Type: application/json');
         echo '{"type": "FeatureCollection","features": ['.join (', ', $parking).']}';
@@ -94,5 +108,19 @@ class Api {
                 'lastInsertId' => $this->db->lastInsertId(),
             ]; 
         }
+    }
+
+    public function setParkingType() {
+        $stmt = $this->db->prepare("UPDATE parking SET freePlaceParking = :freePlaceParking WHERE idParking = :idParking");
+        $stmt->bindParam(':freePlaceParking', $freePlaceParking, PDO::PARAM_STR);
+        $stmt->bindParam(':idParking', $idParking, PDO::PARAM_STR);
+        
+        $freePlaceParking = $_GET['freePlaceParking'];
+        $idParking = $_GET['idParking'];
+
+        $stmt->execute();
+        return [
+            'success' => 'Обновлено успешно',
+        ]; 
     }
 }

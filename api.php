@@ -21,6 +21,10 @@ if (isset($_GET['querytype'])) {
         case 'statisticsOccupationDetailed':
         $result = $api->statisticsOccupationDetailed();
         break;
+        
+        case 'setParkingType':
+        $result = $api->setParkingType();
+        break;
 
         default:
         $result = [
