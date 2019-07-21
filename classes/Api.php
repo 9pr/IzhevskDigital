@@ -61,7 +61,7 @@ class Api {
                 $loadType = "islands#yellowIcon";
                 $loadHintText = "Загрузка: средняя";
             }
-            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Статистика парковки", "balloonContentBody": "<a href=\"statisticsOccupationDetailed.php?idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Краткая информация", "clusterCaption": "Парковка", "hintContent": "'.$loadHintText.'"}}';
+            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Статистика парковки", "balloonContentBody": "<a href=\"/api.php?querytype=statisticsOccupationDetailed.php&idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Краткая информация", "clusterCaption": "Парковка", "hintContent": "'.$loadHintText.'"}}';
         }
         header('Content-Type: application/json');
         echo '{"type": "FeatureCollection","features": ['.join (', ', $parking).']}';
