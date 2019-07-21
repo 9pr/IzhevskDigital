@@ -1,6 +1,7 @@
 .map {
 	position: relative;
-
+	width: 100%;
+	height: 80vh;
 	&__search {
 		position: absolute;
 		left: 20px;
@@ -9,6 +10,6 @@
 	}
 	&__widget {
 		width: 100%;
-		height: 80vh;
+		height: 100%;
 	}
 }
