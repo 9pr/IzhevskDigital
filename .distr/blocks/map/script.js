@@ -5,7 +5,7 @@ function init() {
         myMap = new ymaps.Map('map__widget', {
         center: [56.852593, 53.204843], // Ижевск
         zoom: 18,
-        controls: []
+        controls: ['zoomControl', 'geolocationControl']
     }, {
             searchControlProvider: 'yandex#search'
         });
