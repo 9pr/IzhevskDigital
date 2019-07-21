@@ -95,4 +95,18 @@ class Api {
             ]; 
         }
     }
+
+    public function setParkingType() {
+        $stmt = $this->db->prepare("UPDATE parking SET freePlaceParking = :freePlaceParking WHERE idParking = :idParking");
+        $stmt->bindParam(':freePlaceParking', $freePlaceParking, PDO::PARAM_STR);
+        $stmt->bindParam(':idParking', $idParking, PDO::PARAM_STR);
+        
+        $freePlaceParking = $_GET['freePlaceParking'];
+        $idParking = $_GET['idParking'];
+
+        $stmt->execute();
+        return [
+            'success' => 'Обновлено успешно',
+        ]; 
+    }
 }
