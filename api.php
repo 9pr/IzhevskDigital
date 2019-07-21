@@ -18,6 +18,10 @@ if (isset($_GET['querytype'])) {
         $result = $api->getStatisticsOccupation();
         break;
 
+        case 'statisticsOccupationDetailed':
+        $result = $api->statisticsOccupationDetailed();
+        break;
+
         default:
         $result = [
             'error' => 'Неверный запрос'

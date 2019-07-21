@@ -1,8 +1,0 @@
-{
-    "type": "FeatureCollection",
-    "features": [
-        {"type": "Feature", "id": 0, "geometry": {"type": "Point", "coordinates": [56.849231, 53.222983]}, "options": {"preset": "islands#yellowIcon"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "Тело балуна", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}},
-        {"type": "Feature", "id": 1, "geometry": {"type": "Point", "coordinates": [56.849049, 53.223016]}, "options": {"preset": "islands#greenIcon"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "Тело балуна", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}},
-        {"type": "Feature", "id": 2, "geometry": {"type": "Point", "coordinates": [56.848884, 53.223101]}, "options": {"preset": "islands#redIcon"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "Тело балуна", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}}
-    ]
-}

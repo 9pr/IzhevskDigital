@@ -31,7 +31,6 @@ class Api {
         $sth->execute();
 
         while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
-
             /**
              * [idParking] - идентификатор парковки
              * [coordinatesParking] - координаты парковки
@@ -48,22 +47,31 @@ class Api {
             else {
                 $loadType = "islands#yellowIcon";
             }
-            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "<a href=\"statisticsOccupationDetailed.php?idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}}';
-
-
-
-
-
-
-            // print_r($current);
+            $parking[] = '{"type": "Feature", "id": '.$row['idParking'].', "geometry": {"type": "Point", "coordinates": ['.$row['coordinatesParking'].']}, "options": {"preset": "'.$loadType.'"}, "properties": {"balloonContentHeader": "Заголовок балуна", "balloonContentBody": "<a href=\"/api.php?querytype=statisticsOccupationDetailed&idParking='.$row['idParking'].'\" target=\"_blank\">Подробная статистика</a>", "balloonContentFooter": "Контент балуна подвал", "clusterCaption": "Метка", "hintContent": "Текст подсказки"}}';
         }
-
-        // foreach ($this->db->query($sql, PDO::FETCH_ASSOC) as $row) {
-
-        // }
+        header('Content-Type: application/json');
         echo '{"type": "FeatureCollection","features": ['.join (', ', $parking).']}';
-        return '';
-        return $result;
+        die ;
+    }
+
+    public function statisticsOccupationDetailed () {
+        //портим жизнь злобным хацкерам
+        $idParking = (int)$_GET["idParking"];
+        try {
+                //строка запроса
+                $sql = 'SELECT * FROM `statisticsoccupation` WHERE `idParkingStatisticsOccupation` = '.$idParking;
+                //формируем массив для парковок
+                $parking = [];
+                echo "<pre>";
+                foreach ($this->db->query($sql, PDO::FETCH_ASSOC) as $row) {
+                    print_r($row);
+                }
+                echo "</pre>";
+                die;
+            }
+        catch(PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+        }
     }
 
     public function setParking() {

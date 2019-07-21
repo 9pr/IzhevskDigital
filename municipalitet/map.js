@@ -41,7 +41,7 @@ ymaps.ready(function () {
         map.geoObjects.add(objectManager);
         
         $.ajax({
-            url: "statisticsOccupation.php"
+            url: "/api.php?querytype=getStatisticsOccupation"
         }).done(function(data) {
             objectManager.add(data);
         });
