@@ -1,3 +1,3 @@
 <script>
-  window.location.replace('https://nlevel.yodata.ru/public'); 
+  window.location.replace(location.origin+'/public'); 
 </script>

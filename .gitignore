@@ -6,3 +6,4 @@ gulpconfig.json
 node_modules
 public
 local
+.htaccess
