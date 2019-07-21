@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>NextLevel</title>
 
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE">
@@ -10,14 +10,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
   <link rel="apple-touch-icon" sizes="180x180" href="img/blocks/favicon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="img/blocks/favicon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="img/blocks/favicon/favicon-16x16.png">
-	<link rel="manifest" href="img/blocks/favicon/site.webmanifest">
 	<link rel="mask-icon" href="img/blocks/favicon/safari-pinned-tab.svg" color="#da532c">
 	<meta name="msapplication-TileColor" content="#da532c">
-	<meta name="theme-color" content="#ffffff">
 
 	<link rel="stylesheet" href="css/style.css">
+    <meta name="theme-color" content="#e7e7e7"/>
+    <link rel="shortcut icon" type="image/png" href="/assets/icons/icon-72x72.png">
+    <link rel="manifest" href="/manifest.json">
+
 
 	<!--[if IE]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script><![endif]-->
   <!--[if lte IE 9]><script src="https://phpbbex.com/oldies/oldies.js" charset="utf-8"></script><![endif]-->
@@ -28,7 +28,13 @@
   <!--<![endif]-->
 
   <!--[if IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js"></script><![endif]-->
-
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Registration success. Scope is ', reg.scope))
+        .catch(err => console.log('Registration failed. ', err));
+      }
+    </script>
 </head>
 <body>
 
