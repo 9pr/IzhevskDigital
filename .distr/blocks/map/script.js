@@ -132,6 +132,8 @@ function init() {
                 nearParking = ymaps.geoQuery(ymaps.geocode(newUserPosition, {kind: 'street'})).then( function(){
 
                     var parkingPoint = parkings.getClosestTo(newUserPosition).geometry.getCoordinates();
+                    var coordinates = parkingPoint.join(", ");
+                    console.log(coordinates);
 
 
                     // В зависимости от занятости парковки меняю ее цвет
@@ -145,9 +147,9 @@ function init() {
                     }
 
                     $.ajax({
-                      url: "https://nlevel.yodata.ru/api.php?querytype=setParkingType&freePlaceParking="+parkingStatusInt+"&coordinatesParking="+parkingPoint
+                      url: "https://nlevel.yodata.ru/api.php?querytype=setParkingType&freePlaceParking="+parkingStatusInt+"&coordinatesParking="+coordinates
                     }).done(function( data ) {
-                      alert(data);
+                      alert(data.success);
                   });
                 });
             });
