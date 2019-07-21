@@ -39,29 +39,23 @@ function init() {
                 // С помощью обратного геокодирования найдем ближайшую парковку
                 parking = ymaps.geoQuery(ymaps.geocode(routetEnd, {kind: 'street'}))
                 // Нужно дождаться ответа от сервера и только потом обрабатывать полученные результаты.
-                .then( parkings.getClosestTo(routetEnd).balloon.open() );
+                .then( function(){
 
-                console.log(parking.geometry.getCoordinates())
+                    parkings.getClosestTo(routetEnd).balloon.open();
 
+                    var parkingPoint = parkings.getClosestTo(routetEnd).geometry.getCoordinates()
 
-                // Геолокация
-                geolocation.get({
-                    provider: 'yandex',
-                    mapStateAutoApply: true
-                }).then(function (result) {
-                    var userPosition = result.geoObjects.position;
-                    console.log(userPosition, parking, routetEnd);
-
-
+                    //console.log(parkingPoint);
                     // Строю маршрут
+                    var userPosition = [56.852593, 53.204843]; // TODO починить геолокацию
                     var multiRoute = new ymaps.multiRouter.MultiRoute({
                         referencePoints: [
                             userPosition,
-                            parking,
+                            parkingPoint,
                             routetEnd
                         ],
                         params: {
-                            routingMode: 'masstransit'
+                            routingMode: 'auto'
                         }
                     });
 
@@ -76,8 +70,22 @@ function init() {
                     // Добавляем мультимаршрут на карту.
                     myMap.geoObjects.add(multiRoute);
 
-                });
 
+                    // Геолокация
+                    geolocation.get({
+                        provider: 'browser',
+                        mapStateAutoApply: true
+                    }).then(function (result) {
+                        console.log(result);
+                        var userPosition = result.geoObjects.position;
+                        //console.log(userPosition, parking, routetEnd);
+
+
+                        // Сюда вставляем маршрут - строки 48-68
+
+                    });
+
+                } );
 
 
 
